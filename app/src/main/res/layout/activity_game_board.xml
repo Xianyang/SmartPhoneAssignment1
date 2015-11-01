@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/superView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_new_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEW GAME"/>
+            <Button
+                android:id="@+id/btn_retract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RETRACT"/>
+            <Button
+                android:id="@+id/btn_hints_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HINTS ON"/>
+        </LinearLayout>
+
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/gl"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:orientation="horizontal"
+            android:rowCount="8"
+            android:columnCount="8">
+        </GridLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <ImageView
+                android:src="@drawable/black_chess"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+            <TextView
+                android:id="@+id/txt_black_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="28dp"
+                android:text=":2"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/white_chess"
+                android:layout_marginLeft="30dp"/>
+            <TextView
+                android:id="@+id/txt_white_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="28dp"
+                android:text=":2"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Turn:"
+                android:layout_marginLeft="30dp"
+                android:textSize="28dp"/>
+            <ImageView
+                android:id="@+id/img_turn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/black_chess"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+
