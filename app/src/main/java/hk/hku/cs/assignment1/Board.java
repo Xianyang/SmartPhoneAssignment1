@@ -5,6 +5,7 @@ package hk.hku.cs.assignment1;
  */
 public class Board {
     GameBoard.BoardCellState [][] _board = new GameBoard.BoardCellState[8][8];
+    public boolean _isHintsOn;
 
     public GameBoard.BoardCellState getCellStateAtColumnAndRow(int row, int column) {
         return _board[row][column];

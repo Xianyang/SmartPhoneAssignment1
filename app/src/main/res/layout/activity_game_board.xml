@@ -18,15 +18,15 @@
                 android:layout_height="wrap_content"
                 android:text="NEW GAME"/>
             <Button
-                android:id="@+id/btn_retract"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="RETRACT"/>
-            <Button
                 android:id="@+id/btn_hints_on"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HINTS ON"/>
+                android:text="HINTS OFF"/>
+            <Button
+                android:id="@+id/btn_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RANK"/>
         </LinearLayout>
 
         <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"

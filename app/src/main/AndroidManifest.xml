@@ -23,6 +23,11 @@
             android:label="@string/title_activity_game_board"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".RankActivity"
+            android:label="@string/title_activity_rank"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

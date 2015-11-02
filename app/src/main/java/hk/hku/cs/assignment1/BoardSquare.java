@@ -14,8 +14,9 @@ public class BoardSquare extends RelativeLayout{
     int _column;
     private GameBoard _board;
     private ImageView _blackView;
-    ImageView _whiteView;
-    private ImageView _toPutView;
+    private ImageView _whiteView;
+    private ImageView _toPutBlackView;
+    private ImageView _toPutWhiteView;
 
     public BoardSquare(Context context, GameBoard board, int row, int column) {
         super(context);
@@ -31,9 +32,12 @@ public class BoardSquare extends RelativeLayout{
         _whiteView = new ImageView(context);
         _whiteView.setImageResource(R.drawable.white_chess);
         _whiteView.setAlpha(0.0f);
-        _toPutView = new ImageView(context);
-        _toPutView.setImageResource(R.drawable.black_chess_t);
-        _toPutView.setAlpha(0.0f);
+        _toPutBlackView = new ImageView(context);
+        _toPutBlackView.setImageResource(R.drawable.black_t);
+        _toPutBlackView.setAlpha(0.0f);
+        _toPutWhiteView = new ImageView(context);
+        _toPutWhiteView.setImageResource(R.drawable.white_t);
+        _toPutWhiteView.setAlpha(0.0f);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT,
@@ -42,7 +46,8 @@ public class BoardSquare extends RelativeLayout{
 
         addView(_blackView, params);
         addView(_whiteView, params);
-        addView(_toPutView, params);
+        addView(_toPutBlackView, params);
+        addView(_toPutWhiteView, params);
 
         update();
     }
@@ -53,6 +58,7 @@ public class BoardSquare extends RelativeLayout{
         GameBoard.BoardCellState state = _board.getCellStateAtColumnAndRow(_row, _column);
         _whiteView.setAlpha(state==GameBoard.BoardCellState.BOARD_CELL_STATE_WHITE?1.0f:0.0f);
         _blackView.setAlpha(state==GameBoard.BoardCellState.BOARD_CELL_STATE_BLACK?1.0f:0.0f);
-        _toPutView.setAlpha(state==GameBoard.BoardCellState.BOARD_CELL_STATE_TOPUT?1.0f:0.0f);
+        _toPutBlackView.setAlpha((state==GameBoard.BoardCellState.BOARD_CELL_STATE_TO_PUT_BLACK && _board._isHintsOn)?1.0f:0.0f);
+        _toPutWhiteView.setAlpha((state==GameBoard.BoardCellState.BOARD_CELL_STATE_TO_PUT_WHITE && _board._isHintsOn)?1.0f:0.0f);
     }
 }

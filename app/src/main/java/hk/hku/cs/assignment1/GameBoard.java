@@ -11,10 +11,11 @@ public class GameBoard extends Board {
 
     // 枚举cell的类型
     public enum BoardCellState {
-        BOARD_CELL_STATE_EMPTY(),
-        BOARD_CELL_STATE_BLACK(),
-        BOARD_CELL_STATE_WHITE(),
-        BOARD_CELL_STATE_TOPUT()
+        BOARD_CELL_STATE_EMPTY,
+        BOARD_CELL_STATE_BLACK,
+        BOARD_CELL_STATE_WHITE,
+        BOARD_CELL_STATE_TO_PUT_BLACK,
+        BOARD_CELL_STATE_TO_PUT_WHITE
     }
 
     // 初始化
@@ -24,10 +25,10 @@ public class GameBoard extends Board {
 
     public void startNewGame() {
         super.clearBoard();
-        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_BLACK, 3, 3);
-        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_WHITE, 4, 3);
-        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_WHITE, 3, 4);
-        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_BLACK, 4, 4);
+        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_WHITE, 3, 3);
+        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_BLACK, 4, 3);
+        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_BLACK, 3, 4);
+        super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_WHITE, 4, 4);
 
         _whiteScore = 2;
         _blackScore = 2;
@@ -57,7 +58,6 @@ public class GameBoard extends Board {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -90,7 +90,6 @@ public class GameBoard extends Board {
             moveIndex++;
             target = moveOneStepToADirection(target, directionNumber);
         }
-
         return false;
     }
 
@@ -129,8 +128,8 @@ public class GameBoard extends Board {
         }
     }
 
-    // 放下棋子
-    public void makeMoveToACell(int row, int column) {
+    // 放下棋子 若game over则返回true
+    public boolean isGameOverWhenMakeMoveToACell(int row, int column) {
         super.setCellStateAtColumnAndRowWithState(_nextMove, row, column);
 
         // 改变8个方向其他的棋子
@@ -144,7 +143,6 @@ public class GameBoard extends Board {
         _blackScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_BLACK);
 
         int toPutCount = getToPutCell();
-
         // 判断游戏是否需要change turn 或 end
         if (toPutCount == 0) {
             // change turn
@@ -153,10 +151,10 @@ public class GameBoard extends Board {
             if (toPutCount == 0) {
                 // game over
                 System.out.println("Game Over");
-            } else {
-                // continue
+                return true;
             }
         }
+        return false;
     }
 
     // 翻转棋子
@@ -188,7 +186,6 @@ public class GameBoard extends Board {
         if (state == BoardCellState.BOARD_CELL_STATE_WHITE) {
             return BoardCellState.BOARD_CELL_STATE_BLACK;
         }
-
         return BoardCellState.BOARD_CELL_STATE_EMPTY;
     }
 
@@ -198,12 +195,11 @@ public class GameBoard extends Board {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (isValidMoveToACell(i, j)) {
-                    super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_TOPUT, i, j);
+                    super.setCellStateAtColumnAndRowWithState(_nextMove == BoardCellState.BOARD_CELL_STATE_BLACK?BoardCellState.BOARD_CELL_STATE_TO_PUT_BLACK:BoardCellState.BOARD_CELL_STATE_TO_PUT_WHITE, i, j);
                     count++;
                 }
             }
         }
-
         return count;
     }
 }
