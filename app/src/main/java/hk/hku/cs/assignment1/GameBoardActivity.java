@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -100,9 +101,9 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
         }
 
         // 修改分数
-        String score = String.format(":%d", _board._whiteScore);
+        String score = String.format("%d", _board._whiteScore);
         _whiteScoreTextView.setText(score);
-        score = String.format(":%d", _board._blackScore);
+        score = String.format("%d", _board._blackScore);
         _blackScoreTextView.setText(score);
 
         // 修改Turn
@@ -148,6 +149,10 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
 
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+
+        // get screen width
+        DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 
         GridLayout gridLayout = (GridLayout)findViewById(R.id.gl);
         int width = gridLayout.getWidth() / 8;

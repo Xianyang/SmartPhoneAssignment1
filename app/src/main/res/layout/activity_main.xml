@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="#ffffff">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,11 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dip">
-            <!-- PortalID Label -->
+            <ImageView
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                android:src="@drawable/othello"/>
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:text="Name:Luo Xianyang"
                 android:textAlignment="center"
                 android:textSize="16dp"/>

@@ -4,35 +4,46 @@
     android:id="@+id/superView"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/background">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
             <Button
                 android:id="@+id/btn_new_game"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NEW GAME"/>
+                android:textColor="#ffffff"
+                android:background="@drawable/btn_bg"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:text="RESTRAT"/>
             <Button
                 android:id="@+id/btn_hints_on"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="120dp"
+                android:textColor="#ffffff"
+                android:background="@drawable/btn_bg"
                 android:text="HINTS OFF"/>
             <Button
                 android:id="@+id/btn_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="220dp"
+                android:textColor="#ffffff"
+                android:background="@drawable/btn_bg"
                 android:text="RANK"/>
-        </LinearLayout>
+        </RelativeLayout>
 
         <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/gl"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:layout_width="240dp"
             android:layout_height="240dp"
@@ -41,45 +52,62 @@
             android:columnCount="8">
         </GridLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
             <ImageView
-                android:src="@drawable/black_chess"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:id="@+id/img_big_black"
+                android:src="@drawable/big_black"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="20dp"/>
             <TextView
                 android:id="@+id/txt_black_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_alignLeft="@+id/img_big_black"
+                android:layout_alignRight="@+id/img_big_black"
+                android:layout_alignTop="@+id/img_big_black"
+                android:layout_alignBottom="@+id/img_big_black"
+                android:textAlignment="center"
                 android:textSize="28dp"
-                android:text=":2"/>
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:text="2"/>
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/white_chess"
-                android:layout_marginLeft="30dp"/>
+                android:id="@+id/img_big_white"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/big_white"
+                android:layout_marginLeft="240dp"/>
             <TextView
                 android:id="@+id/txt_white_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_alignLeft="@+id/img_big_white"
+                android:layout_alignRight="@+id/img_big_white"
+                android:layout_alignTop="@+id/img_big_white"
+                android:layout_alignBottom="@+id/img_big_white"
+                android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="28dp"
-                android:text=":2"/>
+                android:text="2"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Turn:"
-                android:layout_marginLeft="30dp"
-                android:textSize="28dp"/>
+                android:text="NOW"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="143dp"
+                android:textSize="20dp"/>
             <ImageView
                 android:id="@+id/img_turn"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="150dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/black_chess"/>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
 

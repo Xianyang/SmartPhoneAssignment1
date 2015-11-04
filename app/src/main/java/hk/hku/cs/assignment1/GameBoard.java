@@ -90,6 +90,7 @@ public class GameBoard extends Board {
             moveIndex++;
             target = moveOneStepToADirection(target, directionNumber);
         }
+
         return false;
     }
 
@@ -132,7 +133,7 @@ public class GameBoard extends Board {
     public boolean isGameOverWhenMakeMoveToACell(int row, int column) {
         super.setCellStateAtColumnAndRowWithState(_nextMove, row, column);
 
-        // 改变8个方向其他的棋子
+        // 翻转，改变8个方向其他的棋子
         for (int i = 0; i < 8; i++) {
             flipChessFromOriginAtADirection(row, column, i, _nextMove);
         }
@@ -143,6 +144,7 @@ public class GameBoard extends Board {
         _blackScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_BLACK);
 
         int toPutCount = getToPutCell();
+
         // 判断游戏是否需要change turn 或 end
         if (toPutCount == 0) {
             // change turn
