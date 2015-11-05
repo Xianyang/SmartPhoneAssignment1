@@ -52,8 +52,6 @@ public class BoardSquare extends RelativeLayout{
         update();
     }
 
-    public BoardSquare(Context context, AttributeSet attrs) { super(context, attrs); }
-
     public void update() {
         GameBoard.BoardCellState state = _board.getCellStateAtColumnAndRow(_row, _column);
         _whiteView.setAlpha(state==GameBoard.BoardCellState.BOARD_CELL_STATE_WHITE?1.0f:0.0f);

@@ -8,8 +8,9 @@ public class GameBoard extends Board {
     int _whiteScore;
     int _blackScore;
     BoardCellState _nextMove;
+    public boolean _isHintsOn;
 
-    // 枚举cell的类型
+    // 枚举棋子
     public enum BoardCellState {
         BOARD_CELL_STATE_EMPTY,
         BOARD_CELL_STATE_BLACK,
@@ -32,40 +33,49 @@ public class GameBoard extends Board {
 
         _whiteScore = 2;
         _blackScore = 2;
-
         _nextMove = BoardCellState.BOARD_CELL_STATE_BLACK;
 
         getToPutCell();
     }
 
-    // 判断某个cell是否valid
-    public boolean isValidMoveToACell(int row, int column) {
-        return isValidMoveToACell(row, column, _nextMove);
+    // 判断下一步可以放棋子的位置
+    private int getToPutCell() {
+        int count = 0;
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                if (isValidMoveToACell(row, column)) {
+                    super.setCellStateAtColumnAndRowWithState(_nextMove == BoardCellState.BOARD_CELL_STATE_BLACK?BoardCellState.BOARD_CELL_STATE_TO_PUT_BLACK:BoardCellState.BOARD_CELL_STATE_TO_PUT_WHITE, row, column);
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
-    private boolean isValidMoveToACell(int row, int column, BoardCellState state) {
+    // 判断某个cell是否valid
+    public boolean isValidMoveToACell(int row, int column) {
+        return isValidMoveToACellWithState(row, column, _nextMove);
+    }
+
+    private boolean isValidMoveToACellWithState(int row, int column, BoardCellState state) {
         // 1.check这里是否有棋子
-        if (super.getCellStateAtColumnAndRow(row, column) == BoardCellState.BOARD_CELL_STATE_WHITE ||
-                super.getCellStateAtColumnAndRow(row, column) == BoardCellState.BOARD_CELL_STATE_BLACK) {
+        if (super.getCellStateAtColumnAndRow(row, column) == BoardCellState.BOARD_CELL_STATE_WHITE || super.getCellStateAtColumnAndRow(row, column) == BoardCellState.BOARD_CELL_STATE_BLACK) {
             return false;
         }
 
         super.setCellStateAtColumnAndRowWithState(BoardCellState.BOARD_CELL_STATE_EMPTY, row, column);
 
         // 2.check其他8个方向是否可以满足放棋子的条件
-        for (int i = 0; i < 8; i++) {
-            if (isValidMoveToAcellWithDirectionToState(row, column, i, state)) {
+        for (int directionNumber = 0; directionNumber < 8; directionNumber++) {
+            if (isValidMoveToACellWithDirectionToState(row, column, directionNumber, state)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isValidMoveToAcellWithDirectionToState(int row, int column, int directionNumber, BoardCellState state) {
-        int [] origin = new int[2];
-        origin[0] = row;
-        origin[1] = column;
-
+    private boolean isValidMoveToACellWithDirectionToState(int row, int column, int directionNumber, BoardCellState state) {
+        int [] origin = new int[]{row, column};
         int []target = moveOneStepToADirection(origin, directionNumber);
         int moveIndex = 1;
 
@@ -81,12 +91,10 @@ public class GameBoard extends Board {
                 if (stateAtTargetCell == state) {
                     return true;
                 }
-
                 if (stateAtTargetCell == BoardCellState.BOARD_CELL_STATE_EMPTY) {
                     return false;
                 }
             }
-
             moveIndex++;
             target = moveOneStepToADirection(target, directionNumber);
         }
@@ -98,35 +106,36 @@ public class GameBoard extends Board {
         switch (directionNumber) {
             case 0: // Up
                 origin[0]--;
-                return origin;
+                break;
             case 1: // Right
                 origin[1]++;
-                return origin;
+                break;
             case 2: // Down
                 origin[0]++;
-                return origin;
+                break;
             case 3: // Left
                 origin[1]--;
-                return origin;
+                break;
             case 4: // RightUp
                 origin[0]--;
                 origin[1]++;
-                return origin;
+                break;
             case 5: // RightDown
                 origin[0]++;
                 origin[1]++;
-                return origin;
+                break;
             case 6: // LeftDown
                 origin[0]++;
                 origin[1]--;
-                return origin;
+                break;
             case 7: // LeftUp
                 origin[0]--;
                 origin[1]--;
-                return origin;
+                break;
             default:
-                return origin;
+                break;
         }
+        return origin;
     }
 
     // 放下棋子 若game over则返回true
@@ -134,17 +143,15 @@ public class GameBoard extends Board {
         super.setCellStateAtColumnAndRowWithState(_nextMove, row, column);
 
         // 翻转，改变8个方向其他的棋子
-        for (int i = 0; i < 8; i++) {
-            flipChessFromOriginAtADirection(row, column, i, _nextMove);
+        for (int directionNumber = 0; directionNumber < 8; directionNumber++) {
+            flipChessFromOriginAtADirection(row, column, directionNumber, _nextMove);
         }
-
-        _nextMove = invertState(_nextMove);
 
         _whiteScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_WHITE);
         _blackScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_BLACK);
+        _nextMove = invertState(_nextMove);
 
         int toPutCount = getToPutCell();
-
         // 判断游戏是否需要change turn 或 end
         if (toPutCount == 0) {
             // change turn
@@ -161,14 +168,12 @@ public class GameBoard extends Board {
 
     // 翻转棋子
     private void flipChessFromOriginAtADirection(int row, int column, int directionNumber, BoardCellState toState) {
-        if (!isValidMoveToAcellWithDirectionToState(row, column, directionNumber, toState)) {
+        if (!isValidMoveToACellWithDirectionToState(row, column, directionNumber, toState)) {
             return;
         }
 
-        int [] origin = new int[2];
-        int [] target = new int[2];
-        origin[0] = row;
-        origin[1] = column;
+        int [] origin = new int[]{row, column};
+        int [] target;
 
         BoardCellState oppenentsState = invertState(toState);
         BoardCellState targetState;
@@ -189,19 +194,5 @@ public class GameBoard extends Board {
             return BoardCellState.BOARD_CELL_STATE_BLACK;
         }
         return BoardCellState.BOARD_CELL_STATE_EMPTY;
-    }
-
-    // 判断下一步可以放棋子的位置
-    private int getToPutCell() {
-        int count = 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (isValidMoveToACell(i, j)) {
-                    super.setCellStateAtColumnAndRowWithState(_nextMove == BoardCellState.BOARD_CELL_STATE_BLACK?BoardCellState.BOARD_CELL_STATE_TO_PUT_BLACK:BoardCellState.BOARD_CELL_STATE_TO_PUT_WHITE, i, j);
-                    count++;
-                }
-            }
-        }
-        return count;
     }
 }

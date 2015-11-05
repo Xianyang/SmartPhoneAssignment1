@@ -80,6 +80,7 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
         _turnImageView = (ImageView)findViewById(R.id.img_turn);
     }
 
+    // 棋盘被点击
     public void boardClick(BoardSquare boardSquare) {
         int row = boardSquare._row;
         int column = boardSquare._column;
@@ -96,8 +97,8 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void updateView() {
-        for (BoardSquare boardSquare1 : _cellArray) {
-            boardSquare1.update();
+        for (BoardSquare boardSquare : _cellArray) {
+            boardSquare.update();
         }
 
         // 修改分数
@@ -108,31 +109,25 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
 
         // 修改Turn
         _turnImageView.setImageResource(_board._nextMove == GameBoard.BoardCellState.BOARD_CELL_STATE_BLACK?R.drawable.black_chess:R.drawable.white_chess);
-
     }
 
     public void gameOver() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // 保存数据到本地
+        Rank rank = new Rank();
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("HIGH_SOCRE", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        int totalGameTimes = sharedPref.getInt("TOTAL_TIMES", 0);
-        editor.putInt("TOTAL_TIMES", ++totalGameTimes);
 
         if (_board._whiteScore > _board._blackScore) {
             builder.setMessage("Game Over, White Wins!");
-            int whiteWinTimes = sharedPref.getInt("WHITE_WIN_TIMES", 0);
-            editor.putInt("WHITE_WIN_TIMES", ++whiteWinTimes);
+            rank.aSideWinsAgain(sharedPref, editor, Rank.WinOrLossState.WHITE_WIN);
         } else if (_board._whiteScore < _board._blackScore) {
             builder.setMessage("Game Over, Black Wins!");
-            int blackWinTimes = sharedPref.getInt("BLACK_WIN_TIMES", 0);
-            editor.putInt("BLACK_WIN_TIMES", ++blackWinTimes);
+            rank.aSideWinsAgain(sharedPref, editor, Rank.WinOrLossState.BLACK_WIN);
         } else {
             builder.setMessage("Game Over, You Draw");
-            int drawTimes = sharedPref.getInt("DRAW_TIMES", 0);
-            editor.putInt("DRAW_TIMES", ++drawTimes);
+            rank.aSideWinsAgain(sharedPref, editor, Rank.WinOrLossState.DRAW);
         }
-        editor.apply();
 
         builder.setCancelable(false);
         builder.setPositiveButton("Start New Game",

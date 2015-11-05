@@ -23,11 +23,12 @@ public class RankActivity extends AppCompatActivity {
         _drawTimes = (TextView)findViewById(R.id.DRAW_TIMES);
         _totalTimes = (TextView)findViewById(R.id.TOTAL_TIMES);
 
+        Rank rank = new Rank();
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("HIGH_SOCRE", 0);
-        String whiteWinsTimes = String.format("%d", sharedPref.getInt("WHITE_WIN_TIMES", 0));
-        String blackWinsTimes = String.format("%d", sharedPref.getInt("BLACK_WIN_TIMES", 0));
-        String drawTimes = String.format("%d", sharedPref.getInt("DRAW_TIMES", 0));
-        String totalTimes = String.format("%d", sharedPref.getInt("TOTAL_TIMES", 0));
+        String whiteWinsTimes = rank.getASideWinTimes(sharedPref, Rank.WinOrLossState.WHITE_WIN);
+        String blackWinsTimes = rank.getASideWinTimes(sharedPref, Rank.WinOrLossState.BLACK_WIN);
+        String drawTimes = rank.getASideWinTimes(sharedPref, Rank.WinOrLossState.DRAW);
+        String totalTimes = rank.getTotalGameTimes(sharedPref);
 
         _whiteWinsTimes.setText(whiteWinsTimes);
         _blackWinsTimes.setText(blackWinsTimes);
