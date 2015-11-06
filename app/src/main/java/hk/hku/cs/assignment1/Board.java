@@ -7,7 +7,7 @@ import java.util.Arrays;
  * Created by luoxianyang on 11/1/15.
  */
 public class Board {
-    GameBoard.BoardCellState [][] _board = new GameBoard.BoardCellState[8][8];
+    private GameBoard.BoardCellState [][] _board = new GameBoard.BoardCellState[8][8];
 
     public GameBoard.BoardCellState getCellStateAtColumnAndRow(int row, int column) {
         return _board[row][column];
@@ -19,9 +19,9 @@ public class Board {
 
     public int countCellsOfState(GameBoard.BoardCellState state) {
         int count = 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (getCellStateAtColumnAndRow(i, j) == state) {
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                if (getCellStateAtColumnAndRow(row, column) == state) {
                     count++;
                 }
             }

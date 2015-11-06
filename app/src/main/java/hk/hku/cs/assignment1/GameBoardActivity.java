@@ -14,11 +14,14 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameBoardActivity extends AppCompatActivity implements View.OnClickListener{
 
     GameBoard _board;
-    ArrayList <BoardSquare> _cellArray = new ArrayList<BoardSquare>(64);
+    ArrayList <BoardSquare> _cellArray = new ArrayList<>(64);
 
     Button _newGameBtn;
     Button _rankBtn;
@@ -27,6 +30,9 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
     TextView _whiteScoreTextView;
     TextView _blackScoreTextView;
     ImageView _turnImageView;
+
+    Timer _timer;
+    TimerTask _timerTask;
 
     @Override
     public void onClick(View v) {
@@ -40,6 +46,8 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
                         public void onClick(DialogInterface dialog, int which) {
                             _board.startNewGame();
                             updateView();
+                            _timer = new Timer();
+                            _timer.schedule(_timerTask, 2000, 50);
                         }
                     });
             builder.setNegativeButton("Cancel",
@@ -78,6 +86,45 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
         _whiteScoreTextView = (TextView)findViewById(R.id.txt_white_score);
         _blackScoreTextView = (TextView)findViewById(R.id.txt_black_score);
         _turnImageView = (ImageView)findViewById(R.id.img_turn);
+
+        _timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Random r = new Random();
+                        int rIndex = r.nextInt(_board._countOfBoardAvailableEachTurn) + 1;
+                        for (int row = 0; row < 8; row++) {
+                            for (int column = 0; column < 8; column++) {
+                                GameBoard.BoardCellState state = _board.getCellStateAtColumnAndRow(row, column);
+                                if (state == GameBoard.BoardCellState.BOARD_CELL_STATE_TO_PUT_BLACK ||
+                                        state == GameBoard.BoardCellState.BOARD_CELL_STATE_TO_PUT_WHITE) {
+                                    if (--rIndex == 0) {
+                                        if (_board.isGameOverWhenMakeMoveToACell(row, column)) {
+                                            // Game over
+                                            updateView();
+                                            gameOver();
+                                            if (_timer != null) {
+                                                _timer.cancel();
+                                                _timer = null;
+                                            }
+                                            return;
+                                        } else {
+                                            updateView();
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        };
+        _timer = new Timer();
+        //_timer.schedule(_timerTask, 2000, 200);
     }
 
     // 棋盘被点击
@@ -146,8 +193,6 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
         super.onWindowFocusChanged(hasFocus);
 
         // get screen width
-        DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 
         GridLayout gridLayout = (GridLayout)findViewById(R.id.gl);
         int width = gridLayout.getWidth() / 8;
@@ -183,5 +228,8 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
                 gridLayout.addView(boardSquare, params);
             }
         }
+
+
+
     }
 }

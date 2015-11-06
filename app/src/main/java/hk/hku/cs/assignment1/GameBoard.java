@@ -9,6 +9,7 @@ public class GameBoard extends Board {
     int _blackScore;
     BoardCellState _nextMove;
     public boolean _isHintsOn;
+    int _countOfBoardAvailableEachTurn;
 
     // 枚举棋子
     public enum BoardCellState {
@@ -35,7 +36,7 @@ public class GameBoard extends Board {
         _blackScore = 2;
         _nextMove = BoardCellState.BOARD_CELL_STATE_BLACK;
 
-        getToPutCell();
+        _countOfBoardAvailableEachTurn = getToPutCell();
     }
 
     // 判断下一步可以放棋子的位置
@@ -75,11 +76,10 @@ public class GameBoard extends Board {
     }
 
     private boolean isValidMoveToACellWithDirectionToState(int row, int column, int directionNumber, BoardCellState state) {
-        int [] origin = new int[]{row, column};
-        int []target = moveOneStepToADirection(origin, directionNumber);
+        int []target = moveOneStepToADirection(new int[]{row, column}, directionNumber);
         int moveIndex = 1;
 
-        while (origin[0] >= 0 && origin[0] <= 7 && origin[1] >= 0 && origin[1] <= 7) {
+        while (target[0] >= 0 && target[0] <= 7 && target[1] >= 0 && target[1] <= 7) {
             BoardCellState stateAtTargetCell = super.getCellStateAtColumnAndRow(target[0], target[1]);
 
             if (moveIndex == 1) {
@@ -91,7 +91,7 @@ public class GameBoard extends Board {
                 if (stateAtTargetCell == state) {
                     return true;
                 }
-                if (stateAtTargetCell == BoardCellState.BOARD_CELL_STATE_EMPTY) {
+                if (stateAtTargetCell == BoardCellState.BOARD_CELL_STATE_EMPTY || stateAtTargetCell == BoardCellState.BOARD_CELL_STATE_TO_PUT_WHITE || stateAtTargetCell == BoardCellState.BOARD_CELL_STATE_TO_PUT_BLACK) {
                     return false;
                 }
             }
@@ -103,39 +103,40 @@ public class GameBoard extends Board {
     }
 
     private int[] moveOneStepToADirection(int[] origin, int directionNumber) {
+        int []target = new int[]{origin[0], origin[1]};
         switch (directionNumber) {
             case 0: // Up
-                origin[0]--;
+                target[0]--;
                 break;
             case 1: // Right
-                origin[1]++;
+                target[1]++;
                 break;
             case 2: // Down
-                origin[0]++;
+                target[0]++;
                 break;
             case 3: // Left
-                origin[1]--;
+                target[1]--;
                 break;
             case 4: // RightUp
-                origin[0]--;
-                origin[1]++;
+                target[0]--;
+                target[1]++;
                 break;
             case 5: // RightDown
-                origin[0]++;
-                origin[1]++;
+                target[0]++;
+                target[1]++;
                 break;
             case 6: // LeftDown
-                origin[0]++;
-                origin[1]--;
+                target[0]++;
+                target[1]--;
                 break;
             case 7: // LeftUp
-                origin[0]--;
-                origin[1]--;
+                target[0]--;
+                target[1]--;
                 break;
             default:
                 break;
         }
-        return origin;
+        return target;
     }
 
     // 放下棋子 若game over则返回true
@@ -151,13 +152,13 @@ public class GameBoard extends Board {
         _blackScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_BLACK);
         _nextMove = invertState(_nextMove);
 
-        int toPutCount = getToPutCell();
+        _countOfBoardAvailableEachTurn = getToPutCell();
         // 判断游戏是否需要change turn 或 end
-        if (toPutCount == 0) {
+        if (_countOfBoardAvailableEachTurn == 0) {
             // change turn
             _nextMove = invertState(_nextMove);
-            toPutCount = getToPutCell();
-            if (toPutCount == 0) {
+            _countOfBoardAvailableEachTurn = getToPutCell();
+            if (_countOfBoardAvailableEachTurn == 0) {
                 // game over
                 System.out.println("Game Over");
                 return true;
@@ -172,14 +173,13 @@ public class GameBoard extends Board {
             return;
         }
 
-        int [] origin = new int[]{row, column};
-        int [] target;
+        int [] target = new int[]{row, column};
 
         BoardCellState oppenentsState = invertState(toState);
         BoardCellState targetState;
 
         do {
-            target = moveOneStepToADirection(origin, directionNumber);
+            target = moveOneStepToADirection(target, directionNumber);
             targetState = super.getCellStateAtColumnAndRow(target[0], target[1]);
             setCellStateAtColumnAndRowWithState(toState, target[0], target[1]);
         } while (target[0] >= 0 && target[0] <= 7 && target[1] >= 0 && target [1] <= 7 && targetState == oppenentsState);
