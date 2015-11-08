@@ -1,7 +1,6 @@
 package hk.hku.cs.assignment1;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 

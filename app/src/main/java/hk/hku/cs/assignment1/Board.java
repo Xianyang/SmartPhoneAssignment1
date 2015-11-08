@@ -1,8 +1,5 @@
 package hk.hku.cs.assignment1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * Created by luoxianyang on 11/1/15.
  */
