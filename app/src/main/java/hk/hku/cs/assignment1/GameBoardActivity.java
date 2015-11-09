@@ -25,6 +25,7 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
     Button _newGameBtn;
     Button _rankBtn;
     Button _hintsonBtn;
+    Button _backBtn;
 
     TextView _whiteScoreTextView;
     TextView _blackScoreTextView;
@@ -65,6 +66,9 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
         } else if (v.getId() == R.id.btn_rank) {
             Intent intent = new Intent(getBaseContext(), RankActivity.class);
             startActivity(intent);
+        } else if (v.getId() == R.id.btn_back) {
+            _board.backAStep();
+            updateView();
         }
     }
 
@@ -81,6 +85,8 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
         _hintsonBtn = (Button)findViewById(R.id.btn_hints_on);
         _hintsonBtn.setOnClickListener(this);
         _hintsonBtn.setText("HINTS OFF");
+        _backBtn = (Button)findViewById(R.id.btn_back);
+        _backBtn.setOnClickListener(this);
         _board._isHintsOn = true;
         _whiteScoreTextView = (TextView)findViewById(R.id.txt_white_score);
         _blackScoreTextView = (TextView)findViewById(R.id.txt_black_score);
@@ -155,6 +161,8 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
 
         // 修改Turn
         _turnImageView.setImageResource(_board._nextMove == GameBoard.BoardCellState.BOARD_CELL_STATE_BLACK?R.drawable.black_chess:R.drawable.white_chess);
+
+        _backBtn.setEnabled(!_board._boards.isEmpty());
     }
 
     public void gameOver() {
@@ -226,5 +234,7 @@ public class GameBoardActivity extends AppCompatActivity implements View.OnClick
                 gridLayout.addView(boardSquare, params);
             }
         }
+
+        _backBtn.setEnabled(!_board._boards.isEmpty());
     }
 }

@@ -1,5 +1,7 @@
 package hk.hku.cs.assignment1;
 
+import java.util.ArrayList;
+
 /**
  * Created by luoxianyang on 11/1/15.
  */
@@ -141,6 +143,10 @@ public class GameBoard extends Board {
 
     // 放下棋子 若game over则返回true
     public boolean isGameOverWhenMakeMoveToACell(int row, int column) {
+        // save last step
+        _boards.add(this.copy());
+        _lastMoves.add(_nextMove);
+
         super.setCellStateAtColumnAndRowWithState(_nextMove, row, column);
 
         // 翻转，改变8个方向其他的棋子
@@ -183,6 +189,20 @@ public class GameBoard extends Board {
             targetState = super.getCellStateAtColumnAndRow(target[0], target[1]);
             setCellStateAtColumnAndRowWithState(toState, target[0], target[1]);
         } while (target[0] >= 0 && target[0] <= 7 && target[1] >= 0 && target [1] <= 7 && targetState == oppenentsState);
+    }
+
+    // back a step
+    public void backAStep() {
+        if (!_boards.isEmpty()) {
+            _board = _boards.get(_boards.size() - 1);
+            _boards.remove(_boards.size() - 1);
+
+            _nextMove = _lastMoves.get(_lastMoves.size() - 1);
+            _lastMoves.remove(_lastMoves.size() - 1);
+
+            _whiteScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_WHITE);
+            _blackScore = super.countCellsOfState(BoardCellState.BOARD_CELL_STATE_BLACK);
+        }
     }
 
     private BoardCellState invertState(BoardCellState state) {
