@@ -191,6 +191,8 @@ public class GameBoard extends Board {
         } while (target[0] >= 0 && target[0] <= 7 && target[1] >= 0 && target [1] <= 7 && targetState == oppenentsState);
     }
 
+    
+
     // back a step
     public void backAStep() {
         if (!_boards.isEmpty()) {
