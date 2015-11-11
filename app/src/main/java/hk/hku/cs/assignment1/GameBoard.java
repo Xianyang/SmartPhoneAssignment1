@@ -205,6 +205,10 @@ public class GameBoard extends Board {
         }
     }
 
+
+    
+    
+
     private BoardCellState invertState(BoardCellState state) {
         if (state == BoardCellState.BOARD_CELL_STATE_BLACK) {
             return BoardCellState.BOARD_CELL_STATE_WHITE;
