@@ -205,6 +205,8 @@ public class GameBoard extends Board {
         }
     }
 
+
+    
     
 
     private BoardCellState invertState(BoardCellState state) {
